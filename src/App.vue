@@ -44,14 +44,14 @@
         <Friend></Friend>
         <Score></Score>
 
-        <component :is="characters"></component>
+        <component :is="character"></component>
         <text
           x="1000"
           y="930"
           style="font: normal 45px 'Recursive; text-transform: uppercase;"
           class="text"
         >
-          {{ characters }}
+          {{ character }}
         </text>
 
         <path fill="#f0959f" d="M0 842h657v192H0z" />
@@ -84,9 +84,9 @@
       </svg>
       <div class="friendtalk">{{ questions[questionIndex].question }}</div>
       <div class="zombietalk">
-        <p v-for="character in characters" :key="character">
-          <button @click="pickQuestion(character)">
-            {{ questions[questionIndex][character] }}
+        <p v-for="characterchoice in characters" :key="characterchoice">
+          <button @click="pickAnswer(characterchoice)">
+            {{ questions[questionIndex][characterchoice] }}
           </button>
         </p>
       </div>
@@ -127,6 +127,9 @@ export default {
       this.$store.commit("updateCharacter", this.characterinput);
       this.$store.commit("updateUIState", "UiEnd");
     },
+    pickAnswer(character) {
+      this.$store.commit(character);
+    },
   },
   computed: {
     ...mapState([
@@ -135,6 +138,7 @@ export default {
       "questionIndex",
       "score",
       "characters",
+      "character",
     ]),
   },
 };
