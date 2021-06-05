@@ -7,10 +7,11 @@
        <input v-model="characterinput" :id="character" :value="character" type="radio">
         <label :for="character">{{character}}</label>
       </p>
+      <button @click="pickcharacter">Pick a character</button>
     </GameStateStart>
     <section v-else>
     <svg viewBox="0 -180 1628 1180" class="main">
-  <defs>
+    <defs>
     <clipPath id="bottom-clip">
       <rect class="bottom-clip-path" x="1131.5" y="546.5" width="406" height="1000" />
     </clipPath>
@@ -19,12 +20,16 @@
     </clipPath>
   </defs>
 
+  <Friend></Friend>
+  <Score></Score>
+
+  <component :is="characters"></component>
   <text
     x="1000"
     y="930"
     style="font: normal 45px 'Recursive; text-transform: uppercase;"
     class="text"
-  >Character Name</text>
+  >{{ characters }}</text>
 
   <path fill="#f0959f" d="M0 842h657v192H0z" />
 
@@ -54,6 +59,17 @@
     />
   </g>
     </svg>
+    <div class="friendtalk">{{questions[questionIndex].question}}</div>
+    <div class="zombietalk">
+     
+        <p v-for="character in characters" :key="character">
+          <button @click="pickQuestion(character)">
+            {{ questions[questionIndex][character] }}
+          </button>
+        </p>
+        
+     
+    </div>
     </section>
   </div>
   
@@ -63,6 +79,11 @@
  import {mapState} from 'vuex'
 
 import GameStateStart from './components/GameStateStart.vue';
+import Score from './components/Score.vue';
+import Artist from '@/components/Artist.vue';
+import Mechanic from '@/components/Mechanic.vue';
+import Baker from '@/components/Baker.vue';
+import Friend from '@/components/Friend.vue';
 
 export default {
   name: 'App',
@@ -70,18 +91,30 @@ export default {
   //   HelloWorld
   // }
   components: {
-    GameStateStart
-    
+    GameStateStart,
+    Score,
+    Friend,
+    Baker, 
+    Mechanic, 
+    Artist
   },
   data() {
     return {
       characterinput: ''
     }
   },
+  methods:{
+    pickcharacter() {
+      this.$store.commit('updateCharacter', this.characterinput)
+      this.$store.commit('updateUIState', 'UiEnd')
+    }
+  },
    computed: {
     ...mapState ([
       'uiState',
       'questions',
+      'questionIndex',
+      'score',
       'characters'
     ])
   }

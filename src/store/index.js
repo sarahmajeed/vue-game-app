@@ -6,7 +6,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         uiState: 'start',
-        characters: ['Baker', 'Mechanic', 'Scientist'],
+        characters: ['baker', 'mechanic', 'artist'],
+        questionIndex: 0,
+        score: 0,
         questions: [
             {
               question: `What's your dog's name?`,
@@ -46,8 +48,14 @@ export default new Vuex.Store({
             },
           ],
     },
+    // Way to update a state
     mutations: {
-
+        updateCharacter (state, characterPicked) {
+            state.characters = characterPicked
+        },
+        updateUIState (state, uiState ) {
+            state.uiState = uiState
+        }
     },
     actions: {
 
