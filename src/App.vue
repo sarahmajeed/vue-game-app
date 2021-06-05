@@ -18,7 +18,8 @@
       </p>
       <button @click="pickcharacter">Pick a character</button>
     </GameStateStart>
-    <section v-else>
+
+    <section v-else-if="uiState === 'UiEnd'">
       <svg viewBox="0 -180 1628 1180" class="main">
         <defs>
           <clipPath id="bottom-clip">
@@ -84,13 +85,17 @@
       </svg>
       <div class="friendtalk">{{ questions[questionIndex].question }}</div>
       <div class="zombietalk">
-        <p v-for="characterchoice in characters" :key="characterchoice">
+        <p
+          v-for="characterchoice in shuffle(characters)"
+          :key="characterchoice"
+        >
           <button @click="pickAnswer(characterchoice)">
             {{ questions[questionIndex][characterchoice] }}
           </button>
         </p>
       </div>
     </section>
+    <GameStateEnd v-else></GameStateEnd>
   </div>
 </template>
 
@@ -103,6 +108,7 @@ import Artist from "@/components/Artist.vue";
 import Mechanic from "@/components/Mechanic.vue";
 import Baker from "@/components/Baker.vue";
 import Friend from "@/components/Friend.vue";
+import GameStateEnd from "./components/GameStateEnd.vue";
 
 export default {
   name: "App",
@@ -116,6 +122,7 @@ export default {
     Baker,
     Mechanic,
     Artist,
+    GameStateEnd,
   },
   data() {
     return {
@@ -128,7 +135,14 @@ export default {
       this.$store.commit("updateUIState", "UiEnd");
     },
     pickAnswer(character) {
-      this.$store.commit(character);
+      this.$store.commit("pickAnswer", character);
+    },
+    shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
     },
   },
   computed: {
