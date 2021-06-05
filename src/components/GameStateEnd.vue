@@ -1,7 +1,7 @@
 <template>
   <div class="modal">
     <h2>You {{ uiState }}</h2>
-
+    <img src="../assets/face.svg" alt="face" /> <br />
     <button @click="handleReset">Play Again!</button>
   </div>
 </template>
